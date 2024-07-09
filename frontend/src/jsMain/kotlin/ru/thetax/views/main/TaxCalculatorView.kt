@@ -1,4 +1,4 @@
-package ru.thetax.views
+package ru.thetax.views.main
 
 import react.*
 import react.dom.aria.*
@@ -12,31 +12,16 @@ import react.dom.html.ReactHTML.select
 import ru.thetax.calculator.TaxCalculator
 import ru.thetax.calculator.TaxDetail
 import ru.thetax.calculator.TaxRates
+import ru.thetax.views.utils.formatNumber
 import web.cssom.ClassName
 
 
 val taxCalculatorView: FC<Props> = FC {
     // ToDo: currency is not supported yet
-    val (inputSalary, setSalary) = useState("")
-    val (salaryDouble, setSalaryDouble) = useState(0.0)
+    val (salaryInput, setSalaryInput) = useState("")
+    val (periodInput, setPeriodInput) = useState(PeriodEnum.YEAR)
+    val (salaryDoubleInternal, setSalaryDoubleIntenal) = useState(0.0)
     val (validInput, setValidInput) = useState("")
-
-    useEffect(inputSalary) {
-        setValidInput(
-            try {
-                setSalaryDouble(
-                    inputSalary
-                        .replace(" ", "")
-                        .replace(",", ".")
-                        .toDouble()
-                )
-                if (salaryDouble < 0) "is-invalid" else "is-valid"
-            } catch (e: NumberFormatException) {
-                setSalaryDouble(Double.NaN)
-                "is-invalid"
-            }
-        )
-    }
 
     div {
         className = ClassName("container")
@@ -53,12 +38,18 @@ val taxCalculatorView: FC<Props> = FC {
                             className = ClassName("input-group shadow mb-1 px-0")
                             input {
                                 className = ClassName("form-control custom-input $validInput")
-                                value = inputSalary
+                                value = salaryInput
                                 placeholder = "Введите доход"
                                 title = "Зарплата в рублях"
                                 asDynamic()["data-toggle"] = "tooltip"
                                 asDynamic()["data-placement"] = "top"
-                                onChange = { event -> setSalary(event.target.value) }
+                                onChange = {
+                                    val inputValue = it.target.value
+                                    setSalaryInput(inputValue)
+                                    val yearSalary = parseAndCalculateYearSalary(inputValue, periodInput)
+                                    setSalaryDoubleIntenal(yearSalary)
+                                    if (yearSalary.isNaN()) setValidInput("is-invalid") else setValidInput("is-valid")
+                                }
                             }
                         }
                     }
@@ -70,12 +61,17 @@ val taxCalculatorView: FC<Props> = FC {
                             ariaLabel = "Default select example"
                             option {
                                 selected = true
-                                value = "В год"
+                                value = PeriodEnum.YEAR
                                 +"В год"
                             }
                             option {
-                                value = "В месяц"
+                                value = PeriodEnum.MONTH
                                 +"В месяц"
+                            }
+                            onChange = {
+                                val period = PeriodEnum.valueOf(it.target.value)
+                                setPeriodInput(period)
+                                setSalaryDoubleIntenal(parseAndCalculateYearSalary(salaryInput, period))
                             }
                         }
                     }
@@ -84,14 +80,14 @@ val taxCalculatorView: FC<Props> = FC {
         }
         if (validInput == "is-valid") {
             card {
-                this.salaryDouble = salaryDouble
+                this.salaryDoubleInternal = salaryDoubleInternal
             }
         }
     }
 }
 
 external interface SalaryProps : Props {
-    var salaryDouble: Double
+    var salaryDoubleInternal: Double
 }
 
 /**
@@ -104,7 +100,7 @@ external interface SalaryProps : Props {
  * </div>
  */
 val card = FC<SalaryProps> { props ->
-    val tax = TaxCalculator(props.salaryDouble, true, false)
+    val tax = TaxCalculator(props.salaryDoubleInternal, true, false)
     div {
         className = ClassName("row justify-content-center")
         div {
@@ -117,7 +113,7 @@ val card = FC<SalaryProps> { props ->
                 }
                 div {
                     className = ClassName("card-body text-dark")
-                    generalRow("Доход до налогов", props.salaryDouble)
+                    generalRow("Доход до налогов", props.salaryDoubleInternal)
                     hr {
                         className = ClassName("bg-danger border-2 border-top border-secondary")
                     }
@@ -133,26 +129,43 @@ val card = FC<SalaryProps> { props ->
                     hr {
                         className = ClassName("bg-danger border-2 border-top border-success")
                     }
-                    generalRow("После налогов", props.salaryDouble - tax.totalTax)
+                    generalRow("После налогов", props.salaryDoubleInternal - tax.totalTax)
                 }
             }
         }
     }
 }
 
+fun parseAndCalculateYearSalary(inputSalary: String, periodInput: PeriodEnum): Double =
+    try {
+        val salary = inputSalary
+            .replace(" ", "")
+            .replace(",", ".")
+            .toDouble()
+
+        when (periodInput) {
+            PeriodEnum.YEAR -> salary
+            PeriodEnum.MONTH -> salary * 12
+            PeriodEnum.WEEK -> salary * 52
+            PeriodEnum.DAY -> salary * 245
+        }
+    } catch (e: NumberFormatException) {
+        Double.NaN
+    }
+
 fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>) {
     div {
         className = ClassName("row")
         div {
             className = ClassName("col-7")
-                p {
-                    className = ClassName("ms-5 fs-6")
-                    +"Сумма налога ${rate.rate * 100}%"
-                }
+            p {
+                className = ClassName("ms-5 fs-6")
+                +"Сумма налога ${rate.rate * 100}%"
+            }
         }
         div {
             className = ClassName("col-5 fs-6 text-end")
-                +(value.find { it.taxRate == rate }?.amount?.toString() ?: "0.0")
+            +(value.find { it.taxRate == rate }?.amount?.formatNumber() ?: "0.0")
         }
     }
 }
@@ -162,13 +175,13 @@ fun ChildrenBuilder.generalRow(text: String, value: Double) {
         className = ClassName("row")
         div {
             className = ClassName("col-7")
-                h5 {
-                    +text
-                }
+            h5 {
+                +text
+            }
         }
         div {
             className = ClassName("col-5 text-end")
-            +(if (value.isNaN() || value == 0.0) "0.0" else value.toString())
+            +(if (value.isNaN() || value == 0.0) "0.0" else value.formatNumber())
         }
     }
 }

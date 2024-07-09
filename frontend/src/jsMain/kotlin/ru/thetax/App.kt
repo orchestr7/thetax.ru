@@ -15,7 +15,7 @@ import web.html.HTMLElement
 import kotlinx.browser.window
 import react.router.dom.RouterProvider
 import react.router.dom.createBrowserRouter
-import ru.thetax.views.taxCalculatorView
+import ru.thetax.views.main.taxCalculatorView
 
 
 /**
