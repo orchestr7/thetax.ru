@@ -1,4 +1,4 @@
-package ru.thetax.common.externals.fontawesome
+package ru.thetax.views.utils.externals.fontawesome
 
 import react.PropsWithChildren
 

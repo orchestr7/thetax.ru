@@ -4,7 +4,7 @@
 
 @file:Suppress("FILE_NAME_MATCH_CLASS")
 
-package ru.thetax.common.externals.fontawesome
+package ru.thetax.views.utils.externals.fontawesome
 
 import react.ChildrenBuilder
 import react.react

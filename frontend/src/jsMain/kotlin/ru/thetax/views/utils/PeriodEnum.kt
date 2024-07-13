@@ -1,4 +1,4 @@
-package ru.thetax.views.main
+package ru.thetax.views.utils
 
 enum class PeriodEnum {
     DAY,

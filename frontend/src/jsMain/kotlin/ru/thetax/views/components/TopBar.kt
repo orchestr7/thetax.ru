@@ -1,4 +1,4 @@
-package ru.thetax.views
+package ru.thetax.views.components
 
 import react.FC
 import react.Props

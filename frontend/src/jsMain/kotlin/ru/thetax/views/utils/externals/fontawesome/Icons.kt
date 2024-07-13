@@ -2,9 +2,11 @@
  * External declarations of icons from fontawesome-solid
  */
 
-package ru.thetax.common.externals.fontawesome
+package ru.thetax.views.utils.externals.fontawesome
 
-import ru.thetax.common.externals.fontawesome.FontAwesomeIconModule
+@JsModule("@fortawesome/free-brands-svg-icons/faGithub")
+@JsNonModule
+external val faGithub: FontAwesomeIconModule
 
 @JsModule("@fortawesome/free-solid-svg-icons/faUser")
 @JsNonModule
@@ -45,6 +47,10 @@ external val faQuestionCircle: FontAwesomeIconModule
 @JsModule("@fortawesome/free-solid-svg-icons/faList")
 @JsNonModule
 external val faList: FontAwesomeIconModule
+
+@JsModule("@fortawesome/free-solid-svg-icons/fa-rub")
+@JsNonModule
+external val faRub: FontAwesomeIconModule
 
 @JsModule("@fortawesome/free-solid-svg-icons/faSpinner")
 @JsNonModule

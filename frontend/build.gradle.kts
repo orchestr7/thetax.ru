@@ -63,10 +63,10 @@ kotlin {
             implementation(npm("@popperjs/core", "2.11.8"))
             implementation(npm("animate.css", "^4.1.1"))
             // ====== font awesome ======
-            implementation(npm("@fortawesome/fontawesome-svg-core", "^1.2.36"))
-            implementation(npm("@fortawesome/free-solid-svg-icons", "5.15.3"))
-            implementation(npm("@fortawesome/free-brands-svg-icons", "5.15.3"))
-            implementation(npm("@fortawesome/react-fontawesome", "^0.1.16"))
+            implementation(npm("@fortawesome/fontawesome-svg-core", "6.5.2"))
+            implementation(npm("@fortawesome/free-solid-svg-icons", "6.5.2"))
+            implementation(npm("@fortawesome/free-brands-svg-icons", "6.5.2"))
+            implementation(npm("@fortawesome/react-fontawesome", "0.2.2"))
         }
     }
 }

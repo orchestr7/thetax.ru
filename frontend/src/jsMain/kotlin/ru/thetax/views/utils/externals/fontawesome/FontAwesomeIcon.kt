@@ -1,7 +1,7 @@
 @file:JsModule("@fortawesome/react-fontawesome")
 @file:JsNonModule
 
-package ru.thetax.common.externals.fontawesome
+package ru.thetax.views.utils.externals.fontawesome
 
 import react.Component
 import react.ReactElement
