@@ -2,8 +2,10 @@ package ru.thetax.views.utils
 
 import js.objects.jso
 import react.ChildrenBuilder
-import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.li
+import react.dom.html.ReactHTML.nav
+import react.dom.html.ReactHTML.p
 import web.cssom.ClassName
 import web.cssom.Cursor
 
@@ -16,10 +18,10 @@ fun ChildrenBuilder.tab(
     div {
         className = ClassName("row justify-content-center")
 
-        ReactHTML.nav {
+        nav {
             className = ClassName(navClassName)
             tabsList.forEachIndexed { i, value ->
-                ReactHTML.li {
+                li {
                     key = i.toString()
                     className = ClassName("nav-item")
                     val classVal =
@@ -28,7 +30,7 @@ fun ChildrenBuilder.tab(
                         } else {
                             ""
                         }
-                    ReactHTML.p {
+                    p {
                         className = ClassName("nav-link $classVal text-gray-800")
                         onClick = {
                             if (selectedTab != value) {

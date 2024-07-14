@@ -3,29 +3,31 @@ package ru.thetax.views.main
 import js.objects.jso
 import react.FC
 import react.Props
-import react.dom.aria.ariaLabel
 import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.img
+import react.dom.html.ReactHTML.input
+import react.dom.html.ReactHTML.option
+import react.dom.html.ReactHTML.p
+import react.dom.html.ReactHTML.select
 import react.useState
 import ru.thetax.views.utils.PeriodEnum
 import ru.thetax.views.utils.externals.fontawesome.faGithub
 import ru.thetax.views.utils.externals.fontawesome.faQuestionCircle
 import ru.thetax.views.utils.externals.fontawesome.fontAwesomeIcon
-import web.cssom.BorderBottomRightRadius
-import web.cssom.BorderTopRightRadius
-import web.cssom.ClassName
-import web.cssom.rem
+import web.cssom.*
 
 /**
  * Header with an input of salary and meta information
  */
 val headerAndInput = FC<HeaderAndInputProps> { props ->
     val (salaryInput, setSalaryInput) = useState("")
-    val (periodInput, setPeriodInput) = useState(PeriodEnum.YEAR)
 
     div {
+        // if one day you would like to make sticky fixed header - use:
+        // row sticky-top
         className = ClassName("full-width-container")
         id = "gradient"
         div {
@@ -42,7 +44,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                 className = ClassName("ps-0")
                                 src = "/img/logo.png"
                                 style = jso {
-                                    width = 2.3.rem
+                                    width = 2.5.rem
                                 }
                             }
                             +"thetax.ru"
@@ -62,11 +64,11 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                 }
                 div {
                     className = ClassName("row text-center pt-5")
-                    ReactHTML.h1 {
+                    h1 {
                         className = ClassName("text-white")
                         +"Налоговый калькулятор"
                     }
-                    ReactHTML.p {
+                    p {
                         className = ClassName("text-white")
                         +"Каким будет Ваш налог с 2025го года?"
                     }
@@ -80,13 +82,12 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                         className = ClassName("row justify-content-center mb-4")
                         // ====== input salary ====
                         div {
-                            className = ClassName("col-8 ps-0 pe-1")
+                            className = ClassName("col-7 ps-0 pe-1")
                             div {
                                 className = ClassName("input-group-lg shadow mb-1")
-                                ReactHTML.input {
+                                input {
                                     className = ClassName("form-control custom-input ${props.validInput}")
-                                    value = salaryInput
-                                    placeholder = "Введите доход"
+                                    placeholder = "Доход до налога"
                                     style = jso {
                                         borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
                                         borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
@@ -97,7 +98,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                     onChange = {
                                         val inputValue = it.target.value
                                         setSalaryInput(inputValue)
-                                        val yearSalary = parseAndCalculateYearSalary(inputValue, periodInput)
+                                        val yearSalary = parseAndCalculateYearSalary(inputValue, props.periodInput)
                                         props.setSalaryDoubleIntenal(yearSalary)
                                         if (yearSalary.isNaN()) props.setValidInput("is-invalid") else props.setValidInput(
                                             "is-valid"
@@ -108,12 +109,11 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                         }
                         // ====== input period ====
                         div {
-                            className = ClassName("col-4 ps-0 pe-0")
-                            ReactHTML.select {
+                            className = ClassName("col-5 ps-0 pe-0")
+                            select {
                                 className = ClassName("form-select shadow form-select-lg")
-                                ariaLabel = "Default select example"
-                                ReactHTML.option {
-                                    selected = true
+                                defaultValue = PeriodEnum.YEAR
+                                option {
                                     value = PeriodEnum.YEAR
                                     +"В год"
                                 }
@@ -121,13 +121,13 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                     borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
                                     borderBottomLeftRadius = 0.unsafeCast<BorderBottomRightRadius>()
                                 }
-                                ReactHTML.option {
+                                option {
                                     value = PeriodEnum.MONTH
                                     +"В месяц"
                                 }
                                 onChange = {
                                     val period = PeriodEnum.valueOf(it.target.value)
-                                    setPeriodInput(period)
+                                    props.setPeriodInput(period)
                                     props.setSalaryDoubleIntenal(parseAndCalculateYearSalary(salaryInput, period))
                                 }
                             }
@@ -141,4 +141,5 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
 
 external interface SalaryProps : Props {
     var salaryDoubleInternal: Double
+    var periodInput: PeriodEnum
 }

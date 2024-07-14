@@ -3,8 +3,10 @@ package ru.thetax.views.main
 import js.objects.jso
 import react.ChildrenBuilder
 import react.FC
-import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.h5
+import react.dom.html.ReactHTML.hr
+import react.dom.html.ReactHTML.p
 import ru.thetax.calculator.TaxCalculator
 import ru.thetax.calculator.TaxDetail
 import ru.thetax.calculator.TaxRates
@@ -23,18 +25,22 @@ val cardWithCalculations = FC<SalaryProps> { props ->
         div {
             className = ClassName("col-lg-5 col-md-7 col-sm-8 col-xs-12")
             div {
-                className = ClassName("card mb-3")
+                className = ClassName("card border-top-0")
                 style = jso {
                     borderRadius = 0.unsafeCast<BorderRadius>()
                 }
                 div {
                     className = ClassName("card-header")
-                    +"Расчет"
+                    when (props.periodInput) {
+                        PeriodEnum.YEAR -> +"Расчет налога"
+                        PeriodEnum.MONTH -> +"Расчет налога"
+                        else -> TODO("Other periods are not supported yet")
+                    }
                 }
                 div {
                     className = ClassName("card-body text-dark")
-                    generalRow("Доход до налогов", props.salaryDoubleInternal)
-                    ReactHTML.hr {
+                    generalRow("Доход до налога", props.salaryDoubleInternal)
+                    hr {
                         className = ClassName("bg-danger border-2 border-top border-secondary")
                     }
                     rowWithRates(TaxRates.RATE_13, tax.taxDetails)
@@ -42,14 +48,33 @@ val cardWithCalculations = FC<SalaryProps> { props ->
                     rowWithRates(TaxRates.RATE_18, tax.taxDetails)
                     rowWithRates(TaxRates.RATE_20, tax.taxDetails)
                     rowWithRates(TaxRates.RATE_22, tax.taxDetails)
-                    ReactHTML.hr {
+                    hr {
                         className = ClassName("bg-danger border-2 border-top border-secondary")
                     }
                     generalRow("Общий налог", tax.totalTax)
-                    ReactHTML.hr {
-                        className = ClassName("bg-danger border-2 border-top border-success")
+                }
+            }
+            div {
+                className = ClassName("card border-top-0")
+                style = jso {
+                    borderRadius = 0.unsafeCast<BorderRadius>()
+                }
+                div {
+                    className = ClassName("card-header")
+                    when (props.periodInput) {
+                        PeriodEnum.YEAR -> +"Доход после налогов"
+                        PeriodEnum.MONTH -> +"Доход после налогов"
+                        else -> TODO("Other periods are not supported yet")
                     }
-                    generalRow("После налогов", props.salaryDoubleInternal - tax.totalTax)
+                }
+                div {
+                    className = ClassName("card-body text-dark")
+                    val salaryAfterTax = props.salaryDoubleInternal - tax.totalTax
+                    generalRow("В год", salaryAfterTax)
+                    hr {
+                        className = ClassName("bg-danger border-2 border-top border-secondary")
+                    }
+                    generalRow("В месяц", salaryAfterTax / 12)
                 }
             }
         }
@@ -78,7 +103,7 @@ fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>) {
         className = ClassName("row")
         div {
             className = ClassName("col-7")
-            ReactHTML.p {
+            p {
                 className = ClassName("ms-5 fs-6")
                 +"Налог ${rate.rate * 100}%"
             }
@@ -95,7 +120,7 @@ fun ChildrenBuilder.generalRow(text: String, value: Double) {
         className = ClassName("row")
         div {
             className = ClassName("col-7")
-            ReactHTML.h5 {
+            h5 {
                 +text
             }
         }
