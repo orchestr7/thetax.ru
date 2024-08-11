@@ -3,7 +3,6 @@ package ru.thetax.views.main
 import js.objects.jso
 import react.FC
 import react.Props
-import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
@@ -12,11 +11,17 @@ import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.option
 import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.select
+import react.useEffect
 import react.useState
 import ru.thetax.views.utils.PeriodEnum
+import ru.thetax.views.utils.externals.cookie.cookie
+import ru.thetax.views.utils.externals.cookie.getLanguageCode
 import ru.thetax.views.utils.externals.fontawesome.faGithub
 import ru.thetax.views.utils.externals.fontawesome.faQuestionCircle
 import ru.thetax.views.utils.externals.fontawesome.fontAwesomeIcon
+import ru.thetax.views.utils.externals.i18n.PlatformLanguages
+import ru.thetax.views.utils.externals.i18n.changeLanguage
+import ru.thetax.views.utils.externals.i18n.useTranslation
 import web.cssom.*
 
 /**
@@ -24,6 +29,9 @@ import web.cssom.*
  */
 val headerAndInput = FC<HeaderAndInputProps> { props ->
     val (salaryInput, setSalaryInput) = useState("")
+    val (t, i18n) = useTranslation("header")
+    val (language, setSelectedLanguage) = useState(PlatformLanguages.getByCodeOrDefault(cookie.getLanguageCode()))
+    useEffect(language) { i18n.changeLanguage(language) }
 
     div {
         // if one day you would like to make sticky fixed header - use:
@@ -37,7 +45,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                 div {
                     className = ClassName("row")
                     div {
-                        className = ClassName("col-6")
+                        className = ClassName("col-5")
                         div {
                             className = ClassName("row d-flex align-items-center text-white")
                             img {
@@ -47,11 +55,26 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                     width = 2.5.rem
                                 }
                             }
-                            +"thetax.ru"
+                            +"thetax.ru".t()
                         }
                     }
                     div {
-                        className = ClassName("col-6 d-flex justify-content-end")
+                        className = ClassName("col-2 d-flex justify-content-center")
+                        PlatformLanguages.entries.forEach { platformLanguage ->
+                            img {
+                                className = ClassName("me-2")
+                                src = "/img/flags/${platformLanguage.code}.svg"
+                                style = jso {
+                                    width = 1.4.rem
+                                    opacity = 0.8.unsafeCast<Opacity>()
+                                    cursor = "pointer".unsafeCast<Cursor>()
+                                }
+                                onClick = { setSelectedLanguage(platformLanguage) }
+                            }
+                        }
+                    }
+                    div {
+                        className = ClassName("col-5 d-flex justify-content-end")
                         a {
                             href = "https://github.com/orchestr7/thetax.ru"
                             fontAwesomeIcon(faGithub, "text-white me-3 fa-xl")
@@ -65,8 +88,8 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                 div {
                     className = ClassName("row text-center pt-5")
                     h1 {
-                        className = ClassName("text-white")
-                        +"Налоговый калькулятор"
+                        className = ClassName("text-white animate__animated animate__bounce")
+                        +"Российский налоговый калькулятор"
                     }
                     p {
                         className = ClassName("text-white")
@@ -75,9 +98,6 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                 }
                 div {
                     className = ClassName("row justify-content-center")
-
-                    // tab("", listOf("a", "b")) { }
-
                     div {
                         className = ClassName("row justify-content-center mb-4")
                         // ====== input salary ====

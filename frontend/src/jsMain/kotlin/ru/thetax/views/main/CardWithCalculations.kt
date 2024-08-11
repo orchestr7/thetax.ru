@@ -11,6 +11,7 @@ import ru.thetax.calculator.TaxCalculator
 import ru.thetax.calculator.TaxDetail
 import ru.thetax.calculator.TaxRates
 import ru.thetax.views.utils.PeriodEnum
+import ru.thetax.views.utils.externals.i18n.useTranslation
 import ru.thetax.views.utils.formatNumber
 import web.cssom.BorderRadius
 import web.cssom.ClassName
@@ -19,7 +20,12 @@ import web.cssom.ClassName
  * Detailed tax calculations
  */
 val cardWithCalculations = FC<SalaryProps> { props ->
+    // FixMe: should be added later
+    /*val (t) = useTranslation("calculator-card")*/
+
+
     val tax = TaxCalculator(props.salaryDoubleInternal, true, false)
+
     div {
         className = ClassName("row justify-content-center")
         div {

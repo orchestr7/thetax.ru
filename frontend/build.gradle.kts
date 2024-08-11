@@ -67,6 +67,13 @@ kotlin {
             implementation(npm("@fortawesome/free-solid-svg-icons", "6.5.2"))
             implementation(npm("@fortawesome/free-brands-svg-icons", "6.5.2"))
             implementation(npm("@fortawesome/react-fontawesome", "0.2.2"))
+            // ====== translation ======
+            implementation(npm("i18next", "^23.12.2"))
+            implementation(npm("react-i18next", "^15.0.0"))
+            implementation(npm("i18next-http-backend", "^2.5.2"))
+            implementation(npm("js-cookie", "^3.0.5"))
+            // ====== animation =========
+            implementation(npm("animate.css", "^4.1.1"))
         }
     }
 }

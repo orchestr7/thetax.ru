@@ -17,6 +17,7 @@ import react.router.dom.RouterProvider
 import react.router.dom.createBrowserRouter
 import ru.thetax.views.components.errorBoundary
 import ru.thetax.views.main.taxCalculatorView
+import ru.thetax.views.utils.externals.i18n.initI18n
 
 
 /**
@@ -48,9 +49,9 @@ fun main() {
     kotlinext.js.require<dynamic>("../scss/tax-app.scss")
     // this is needed for webpack to include bootstrap
     kotlinext.js.require<dynamic>("bootstrap")
-    /*    ReactModal.setAppElement(document.getElementById("wrapper") as HTMLElement)  // required for accessibility in react-modal
+    /*    ReactModal.setAppElement(document.getElementById("wrapper") as HTMLElement)  // required for accessibility in react-modal */
 
-        initI18n()*/
+    initI18n()
     val mainDiv = document.getElementById("wrapper") as HTMLElement
     createRoot(mainDiv).render(App.create())
 }
