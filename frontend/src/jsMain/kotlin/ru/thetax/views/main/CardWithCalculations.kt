@@ -11,6 +11,7 @@ import ru.thetax.calculator.TaxCalculator
 import ru.thetax.calculator.TaxDetail
 import ru.thetax.calculator.TaxRates
 import ru.thetax.views.utils.PeriodEnum
+import ru.thetax.views.utils.externals.i18n.TranslationFunction
 import ru.thetax.views.utils.externals.i18n.useTranslation
 import ru.thetax.views.utils.formatNumber
 import web.cssom.BorderRadius
@@ -20,68 +21,63 @@ import web.cssom.ClassName
  * Detailed tax calculations
  */
 val cardWithCalculations = FC<SalaryProps> { props ->
-    // FixMe: should be added later
-    /*val (t) = useTranslation("calculator-card")*/
-
+    val (t) = useTranslation("calculator-card")
 
     val tax = TaxCalculator(props.salaryDoubleInternal, true, false)
 
     div {
-        className = ClassName("row justify-content-center")
+        className = ClassName("col-lg-5 col-md-7 col-sm-8 col-xs-12")
         div {
-            className = ClassName("col-lg-5 col-md-7 col-sm-8 col-xs-12")
+            className = ClassName("card border-top-0")
+            style = jso {
+                borderRadius = 0.unsafeCast<BorderRadius>()
+            }
             div {
-                className = ClassName("card border-top-0")
-                style = jso {
-                    borderRadius = 0.unsafeCast<BorderRadius>()
-                }
-                div {
-                    className = ClassName("card-header")
-                    when (props.periodInput) {
-                        PeriodEnum.YEAR -> +"Расчет налога"
-                        PeriodEnum.MONTH -> +"Расчет налога"
-                        else -> TODO("Other periods are not supported yet")
-                    }
-                }
-                div {
-                    className = ClassName("card-body text-dark")
-                    generalRow("Доход до налога", props.salaryDoubleInternal)
-                    hr {
-                        className = ClassName("bg-danger border-2 border-top border-secondary")
-                    }
-                    rowWithRates(TaxRates.RATE_13, tax.taxDetails)
-                    rowWithRates(TaxRates.RATE_15, tax.taxDetails)
-                    rowWithRates(TaxRates.RATE_18, tax.taxDetails)
-                    rowWithRates(TaxRates.RATE_20, tax.taxDetails)
-                    rowWithRates(TaxRates.RATE_22, tax.taxDetails)
-                    hr {
-                        className = ClassName("bg-danger border-2 border-top border-secondary")
-                    }
-                    generalRow("Общий налог", tax.totalTax)
+                className = ClassName("card-header")
+                when (props.periodInput) {
+                    PeriodEnum.YEAR -> +"Расчет налога".t()
+                    PeriodEnum.MONTH -> +"Расчет налога".t()
+                    else -> TODO("Other periods are not supported yet")
                 }
             }
             div {
-                className = ClassName("card border-top-0")
-                style = jso {
-                    borderRadius = 0.unsafeCast<BorderRadius>()
+                className = ClassName("card-body text-dark")
+                generalRow("Доход до налога".t(), props.salaryDoubleInternal, t)
+                hr {
+                    className = ClassName("bg-danger border-2 border-top border-secondary")
                 }
-                div {
-                    className = ClassName("card-header")
-                    when (props.periodInput) {
-                        PeriodEnum.YEAR -> +"Доход после налогов"
-                        PeriodEnum.MONTH -> +"Доход после налогов"
-                        else -> TODO("Other periods are not supported yet")
-                    }
+                rowWithRates(TaxRates.RATE_13, tax.taxDetails, t)
+                rowWithRates(TaxRates.RATE_15, tax.taxDetails, t)
+                rowWithRates(TaxRates.RATE_18, tax.taxDetails, t)
+                rowWithRates(TaxRates.RATE_20, tax.taxDetails, t)
+                rowWithRates(TaxRates.RATE_22, tax.taxDetails, t)
+                hr {
+                    className = ClassName("bg-danger border-2 border-top border-secondary")
                 }
-                div {
-                    className = ClassName("card-body text-dark")
-                    val salaryAfterTax = props.salaryDoubleInternal - tax.totalTax
-                    generalRow("В год", salaryAfterTax)
-                    hr {
-                        className = ClassName("bg-danger border-2 border-top border-secondary")
-                    }
-                    generalRow("В месяц", salaryAfterTax / 12)
+                generalRow("Общий налог".t(), tax.totalTax, t)
+            }
+        }
+        div {
+            className = ClassName("card border-top-0")
+            style = jso {
+                borderRadius = 0.unsafeCast<BorderRadius>()
+            }
+            div {
+                className = ClassName("card-header")
+                when (props.periodInput) {
+                    PeriodEnum.YEAR -> +"Доход после налогов".t()
+                    PeriodEnum.MONTH -> +"Доход после налогов".t()
+                    else -> TODO("Other periods are not supported yet")
                 }
+            }
+            div {
+                className = ClassName("card-body text-dark")
+                val salaryAfterTax = props.salaryDoubleInternal - tax.totalTax
+                generalRow("В год".t(), salaryAfterTax, t)
+                hr {
+                    className = ClassName("bg-danger border-2 border-top border-secondary")
+                }
+                generalRow("В месяц".t(), salaryAfterTax / 12, t)
             }
         }
     }
@@ -104,14 +100,14 @@ fun parseAndCalculateYearSalary(inputSalary: String, periodInput: PeriodEnum): D
         Double.NaN
     }
 
-fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>) {
+fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>, t: TranslationFunction) {
     div {
         className = ClassName("row")
         div {
             className = ClassName("col-7")
             p {
                 className = ClassName("ms-5 fs-6")
-                +"Налог ${rate.rate * 100}%"
+                +("Налог".t() + " ${rate.rate * 100}%")
             }
         }
         div {
@@ -121,13 +117,13 @@ fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>) {
     }
 }
 
-fun ChildrenBuilder.generalRow(text: String, value: Double) {
+fun ChildrenBuilder.generalRow(text: String, value: Double, t: TranslationFunction) {
     div {
         className = ClassName("row")
         div {
             className = ClassName("col-7")
             h5 {
-                +text
+                +text.t()
             }
         }
         div {

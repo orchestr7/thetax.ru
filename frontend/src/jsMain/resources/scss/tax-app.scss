@@ -17,3 +17,31 @@
   background: lightgoldenrodyellow;
   z-index: 0;
 }
+
+.logo img {
+    transition: 0.4s;
+}
+
+.logo:hover img {
+    transition: 0.4s;
+    transform: scale(1.1);
+}
+
+.logo svg {
+    opacity: 0.8;
+    transition: 0.4s;
+}
+
+.logo:hover svg {
+    transition: 0.4s;
+    opacity: 1;
+}
+
+.collapsible {
+    opacity: 0;
+}
+
+.collapsible.active {
+    transition: 0.3s;
+    opacity: 100;
+}

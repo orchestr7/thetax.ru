@@ -1,7 +1,9 @@
 package ru.thetax.views.main
 
 import react.*
+import react.dom.html.ReactHTML.div
 import ru.thetax.views.utils.PeriodEnum
+import web.cssom.ClassName
 
 val taxCalculatorView: FC<Props> = FC {
     // ToDo: currency is not supported yet
@@ -20,12 +22,14 @@ val taxCalculatorView: FC<Props> = FC {
         this.periodInput = periodInput
     }
 
-    if (validInput == "is-valid") {
-        cardWithCalculations {
-            this.salaryDoubleInternal = salaryDoubleInternal
-            this.periodInput = periodInput
+
+        div {
+            className = ClassName("collapsible ${if (validInput == "is-valid") "active" else ""} row justify-content-center country")
+            cardWithCalculations {
+                this.salaryDoubleInternal = salaryDoubleInternal
+                this.periodInput = periodInput
+            }
         }
-    }
 }
 
 

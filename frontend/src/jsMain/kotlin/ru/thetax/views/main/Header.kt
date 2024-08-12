@@ -1,8 +1,7 @@
 package ru.thetax.views.main
 
 import js.objects.jso
-import react.FC
-import react.Props
+import react.*
 import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
@@ -11,8 +10,6 @@ import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.option
 import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.select
-import react.useEffect
-import react.useState
 import ru.thetax.views.utils.PeriodEnum
 import ru.thetax.views.utils.externals.cookie.cookie
 import ru.thetax.views.utils.externals.cookie.getLanguageCode
@@ -61,15 +58,22 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                     div {
                         className = ClassName("col-2 d-flex justify-content-center")
                         PlatformLanguages.entries.forEach { platformLanguage ->
-                            img {
-                                className = ClassName("me-2")
-                                src = "/img/flags/${platformLanguage.code}.svg"
-                                style = jso {
-                                    width = 1.4.rem
-                                    opacity = 0.8.unsafeCast<Opacity>()
-                                    cursor = "pointer".unsafeCast<Cursor>()
+                            div {
+                                className = ClassName(if (platformLanguage != language) "logo" else "")
+                                img {
+                                    className = ClassName("me-2")
+                                    src = "/img/flags/${platformLanguage.code}.svg"
+                                    style = jso {
+                                        if (platformLanguage == language) {
+                                            opacity = 1.unsafeCast<Opacity>()
+                                        } else {
+                                            cursor = "pointer".unsafeCast<Cursor>()
+                                            opacity = 0.7.unsafeCast<Opacity>()
+                                        }
+                                        width = 1.4.rem
+                                    }
+                                    onClick = { setSelectedLanguage(platformLanguage) }
                                 }
-                                onClick = { setSelectedLanguage(platformLanguage) }
                             }
                         }
                     }
@@ -89,11 +93,11 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                     className = ClassName("row text-center pt-5")
                     h1 {
                         className = ClassName("text-white animate__animated animate__bounce")
-                        +"Российский налоговый калькулятор"
+                        +"Российский налоговый калькулятор".t()
                     }
                     p {
                         className = ClassName("text-white")
-                        +"Каким будет Ваш налог с 2025го года?"
+                        +"Каким будет Ваш налог с 2025го года?".t()
                     }
                 }
                 div {
@@ -107,12 +111,12 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                 className = ClassName("input-group-lg shadow mb-1")
                                 input {
                                     className = ClassName("form-control custom-input ${props.validInput}")
-                                    placeholder = "Доход до налога"
+                                    placeholder = "Доход до налога".t()
                                     style = jso {
                                         borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
                                         borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
                                     }
-                                    title = "Зарплата в рублях"
+                                    title = "Зарплата в рублях".t()
                                     asDynamic()["data-toggle"] = "tooltip"
                                     asDynamic()["data-placement"] = "top"
                                     onChange = {
@@ -120,9 +124,17 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                         setSalaryInput(inputValue)
                                         val yearSalary = parseAndCalculateYearSalary(inputValue, props.periodInput)
                                         props.setSalaryDoubleIntenal(yearSalary)
-                                        if (yearSalary.isNaN()) props.setValidInput("is-invalid") else props.setValidInput(
-                                            "is-valid"
-                                        )
+                                        // this "startTransition" logic prevents the following error:
+                                        // A component suspended while responding to synchronous input.
+                                        // This will cause the UI to be replaced with a loading indicator.
+                                        // To fix, updates that suspend should be wrapped with startTransition.
+                                        //
+                                        // And it is somehow related to the check that we have in a parent class (where we check isValid)
+                                        startTransition {
+                                            if (yearSalary.isNaN()) props.setValidInput("is-invalid") else props.setValidInput(
+                                                "is-valid"
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -135,7 +147,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                 defaultValue = PeriodEnum.YEAR
                                 option {
                                     value = PeriodEnum.YEAR
-                                    +"В год"
+                                    +"В год".t()
                                 }
                                 style = jso {
                                     borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
@@ -143,7 +155,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                 }
                                 option {
                                     value = PeriodEnum.MONTH
-                                    +"В месяц"
+                                    +"В месяц".t()
                                 }
                                 onChange = {
                                     val period = PeriodEnum.valueOf(it.target.value)
