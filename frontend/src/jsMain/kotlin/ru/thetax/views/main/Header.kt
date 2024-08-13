@@ -3,6 +3,7 @@ package ru.thetax.views.main
 import js.objects.jso
 import react.*
 import react.dom.html.ReactHTML.a
+import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.img
@@ -20,6 +21,7 @@ import ru.thetax.views.utils.externals.i18n.PlatformLanguages
 import ru.thetax.views.utils.externals.i18n.changeLanguage
 import ru.thetax.views.utils.externals.i18n.useTranslation
 import web.cssom.*
+import web.html.ButtonType
 
 /**
  * Header with an input of salary and meta information
@@ -58,6 +60,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                     div {
                         className = ClassName("col-2 d-flex justify-content-center")
                         PlatformLanguages.entries.forEach { platformLanguage ->
+
                             div {
                                 className = ClassName(if (platformLanguage != language) "logo" else "")
                                 img {
@@ -72,7 +75,10 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                         }
                                         width = 1.4.rem
                                     }
-                                    onClick = { setSelectedLanguage(platformLanguage) }
+                                    onClick = {
+                                        console.log(platformLanguage)
+                                        setSelectedLanguage(platformLanguage)
+                                    }
                                 }
                             }
                         }
@@ -84,7 +90,8 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                             fontAwesomeIcon(faGithub, "text-white me-3 fa-xl")
                         }
                         a {
-                            href = "https://www.vedomosti.ru/economics/news/2024/07/10/1049144-sovet-federatsii-odobril?from=read_also=2"
+                            href =
+                                "https://www.vedomosti.ru/economics/news/2024/07/10/1049144-sovet-federatsii-odobril?from=read_also=2"
                             fontAwesomeIcon(faQuestionCircle, "text-white fa-xl")
                         }
                     }
@@ -99,9 +106,10 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                         className = ClassName("text-white")
                         +"Каким будет Ваш налог с 2025го года?".t()
                     }
+                    menu {}
                 }
                 div {
-                    className = ClassName("row justify-content-center")
+                    className = ClassName("mt-3 row justify-content-center")
                     div {
                         className = ClassName("row justify-content-center mb-4")
                         // ====== input salary ====
@@ -165,6 +173,58 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+val menu = FC<SalaryProps> {
+    div {
+        className = ClassName("row d-flex justify-content-center")
+        div {
+            className = ClassName("col-8")
+            button {
+                type = ButtonType.button
+                className = ClassName("btn btn-outline-light")
+                +"Test"
+                style = jso {
+                    borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
+                    borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
+                }
+            }
+
+            button {
+                type = ButtonType.button
+                className = ClassName("btn btn-outline-light")
+                +"Test"
+                style = jso {
+                    borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
+                    borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
+                    borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
+                    borderBottomLeftRadius = 0.unsafeCast<BorderBottomRightRadius>()
+                }
+            }
+
+            button {
+                type = ButtonType.button
+                className = ClassName("btn btn-outline-light")
+                +"Test"
+                style = jso {
+                    borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
+                    borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
+                    borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
+                    borderBottomLeftRadius = 0.unsafeCast<BorderBottomRightRadius>()
+                }
+            }
+
+            button {
+                type = ButtonType.button
+                className = ClassName("btn btn-outline-light")
+                +"Test"
+                style = jso {
+                    borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
+                    borderBottomLeftRadius = 0.unsafeCast<BorderBottomRightRadius>()
                 }
             }
         }
