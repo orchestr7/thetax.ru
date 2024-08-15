@@ -6,6 +6,8 @@ import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
+import react.dom.html.ReactHTML.h5
+import react.dom.html.ReactHTML.h6
 import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.option
@@ -14,9 +16,7 @@ import react.dom.html.ReactHTML.select
 import ru.thetax.views.utils.PeriodEnum
 import ru.thetax.views.utils.externals.cookie.cookie
 import ru.thetax.views.utils.externals.cookie.getLanguageCode
-import ru.thetax.views.utils.externals.fontawesome.faGithub
-import ru.thetax.views.utils.externals.fontawesome.faQuestionCircle
-import ru.thetax.views.utils.externals.fontawesome.fontAwesomeIcon
+import ru.thetax.views.utils.externals.fontawesome.*
 import ru.thetax.views.utils.externals.i18n.PlatformLanguages
 import ru.thetax.views.utils.externals.i18n.changeLanguage
 import ru.thetax.views.utils.externals.i18n.useTranslation
@@ -96,20 +96,27 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                         }
                     }
                 }
+
                 div {
-                    className = ClassName("row text-center pt-5")
+                    className = ClassName("row text-center mt-5")
                     h1 {
-                        className = ClassName("text-white animate__animated animate__bounce")
+                        style = jso {
+                            color = "rgb(253, 223, 197)".unsafeCast<Color>()
+                        }
                         +"Российский налоговый калькулятор".t()
                     }
-                    p {
+
+                    h6 {
                         className = ClassName("text-white")
-                        +"Каким будет Ваш налог с 2025го года?".t()
+                        +"Каким будет Ваш налог с 2025го года".t()
                     }
+
                     menu {}
+
                 }
+
                 div {
-                    className = ClassName("mt-3 row justify-content-center")
+                    className = ClassName("row mt-3 justify-content-center")
                     div {
                         className = ClassName("row justify-content-center mb-4")
                         // ====== input salary ====
@@ -181,55 +188,52 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
 
 val menu = FC<SalaryProps> {
     div {
-        className = ClassName("row d-flex justify-content-center")
+        className = ClassName("row mt-3 d-flex justify-content-center")
         div {
-            className = ClassName("col-8")
-            button {
-                type = ButtonType.button
-                className = ClassName("btn btn-outline-light")
-                +"Test"
-                style = jso {
-                    borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
-                    borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
-                }
+            className = ClassName("border col-xl-8 col-lg-8 col-md-8 col-sm-9 col-xs-10 d-flex justify-content-center")
+
+            style = jso {
+/*
+                backgroundColor = "rgb(49, 79, 126)".unsafeCast<BackgroundColor>()
+*/
+                borderRadius = 10.px
             }
 
-            button {
-                type = ButtonType.button
-                className = ClassName("btn btn-outline-light")
-                +"Test"
-                style = jso {
-                    borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
-                    borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
-                    borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
-                    borderBottomLeftRadius = 0.unsafeCast<BorderBottomRightRadius>()
+            menuButton(faEnvelope, "Новый", "НДФЛ")
+            menuButton(faMoneyTrend, "Доход", "снизится?")
+            menuButton(faSack, "Все", "налоги")
+        }
+    }
+}
+
+fun ChildrenBuilder.menuButton(faIconModule: FontAwesomeIconModule, text1: String, text2: String) {
+    button {
+        type = ButtonType.button
+        className = ClassName("my-2 btn btn-outline-light border-0")
+        div {
+            className = ClassName("col")
+            div {
+                className = ClassName("row d-flex justify-content-center mb-2")
+                fontAwesomeIcon(faIconModule, "text-white fa-xl mx-2")
+            }
+            div {
+                className = ClassName("row d-flex justify-content-center")
+                h6 {
+                    className = ClassName("mb-0")
+                    +text1
                 }
             }
-
-            button {
-                type = ButtonType.button
-                className = ClassName("btn btn-outline-light")
-                +"Test"
-                style = jso {
-                    borderTopRightRadius = 0.unsafeCast<BorderTopRightRadius>()
-                    borderBottomRightRadius = 0.unsafeCast<BorderBottomRightRadius>()
-                    borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
-                    borderBottomLeftRadius = 0.unsafeCast<BorderBottomRightRadius>()
-                }
-            }
-
-            button {
-                type = ButtonType.button
-                className = ClassName("btn btn-outline-light")
-                +"Test"
-                style = jso {
-                    borderTopLeftRadius = 0.unsafeCast<BorderTopRightRadius>()
-                    borderBottomLeftRadius = 0.unsafeCast<BorderBottomRightRadius>()
+            div {
+                className = ClassName("row d-flex justify-content-center")
+                h6 {
+                    className = ClassName("mb-0")
+                    +text2
                 }
             }
         }
     }
 }
+
 
 external interface SalaryProps : Props {
     var salaryDoubleInternal: Double
