@@ -1,19 +1,17 @@
-package ru.thetax.views.main
+package ru.thetax.views.main.header
 
 import js.objects.jso
 import react.*
 import react.dom.html.ReactHTML.a
-import react.dom.html.ReactHTML.button
-import react.dom.html.ReactHTML.col
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
-import react.dom.html.ReactHTML.h5
 import react.dom.html.ReactHTML.h6
 import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.option
-import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.select
+import ru.thetax.views.main.HeaderAndInputProps
+import ru.thetax.views.main.parseAndCalculateYearSalary
 import ru.thetax.views.utils.PeriodEnum
 import ru.thetax.views.utils.externals.cookie.cookie
 import ru.thetax.views.utils.externals.cookie.getLanguageCode
@@ -22,7 +20,6 @@ import ru.thetax.views.utils.externals.i18n.PlatformLanguages
 import ru.thetax.views.utils.externals.i18n.changeLanguage
 import ru.thetax.views.utils.externals.i18n.useTranslation
 import web.cssom.*
-import web.html.ButtonType
 
 /**
  * Header with an input of salary and meta information
@@ -186,53 +183,6 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
         }
     }
 }
-
-val menu = FC<SalaryProps> {
-    div {
-        className = ClassName("row mt-3 d-flex justify-content-center")
-        div {
-            className = ClassName("border col-xl-8 col-lg-8 col-md-8 col-sm-9 col-xs-10 d-flex justify-content-center px-3")
-            style = jso {
-                borderRadius = 10.px
-            }
-            menuButton(faEnvelope, "Новый", "НДФЛ", true)
-            menuButton(faMoneyTrend, "Доход", "снизится?", false)
-            menuButton(faSack, "Все", "налоги", false)
-        }
-    }
-}
-
-fun ChildrenBuilder.menuButton(faIconModule: FontAwesomeIconModule, text1: String, text2: String, isActive: Boolean) {
-    button {
-        type = ButtonType.button
-        className = ClassName("${if (isActive) "active" else "hover-button"} my-2 btn btn-outline-light border-0 mx-1")
-        div {
-            style = jso {
-                color = if (isActive) rgb(50,50,50) else rgb(210, 210, 230)
-            }
-            className = ClassName("col")
-            div {
-                className = ClassName("row d-flex justify-content-center mb-2")
-                fontAwesomeIcon(faIconModule, "fa-xl mx-2")
-            }
-            div {
-                className = ClassName("row d-flex justify-content-center")
-                h6 {
-                    className = ClassName("mb-0")
-                    +text1
-                }
-            }
-            div {
-                className = ClassName("row d-flex justify-content-center")
-                h6 {
-                    className = ClassName("mb-0")
-                    +text2
-                }
-            }
-        }
-    }
-}
-
 
 external interface SalaryProps : Props {
     var salaryDoubleInternal: Double

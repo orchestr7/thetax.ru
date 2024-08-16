@@ -10,6 +10,7 @@ import react.dom.html.ReactHTML.p
 import ru.thetax.calculator.TaxCalculator
 import ru.thetax.calculator.TaxDetail
 import ru.thetax.calculator.TaxRates
+import ru.thetax.views.main.header.SalaryProps
 import ru.thetax.views.utils.PeriodEnum
 import ru.thetax.views.utils.externals.i18n.TranslationFunction
 import ru.thetax.views.utils.externals.i18n.useTranslation

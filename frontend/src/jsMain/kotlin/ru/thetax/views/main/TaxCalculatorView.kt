@@ -2,6 +2,7 @@ package ru.thetax.views.main
 
 import react.*
 import react.dom.html.ReactHTML.div
+import ru.thetax.views.main.header.headerAndInput
 import ru.thetax.views.utils.PeriodEnum
 import web.cssom.ClassName
 
