@@ -3,6 +3,7 @@ package ru.thetax.views.main
 import js.objects.jso
 import react.ChildrenBuilder
 import react.FC
+import react.Props
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h5
 import react.dom.html.ReactHTML.hr
@@ -10,13 +11,17 @@ import react.dom.html.ReactHTML.p
 import ru.thetax.calculator.TaxCalculator
 import ru.thetax.calculator.TaxDetail
 import ru.thetax.calculator.TaxRates
-import ru.thetax.views.main.header.SalaryProps
 import ru.thetax.views.utils.PeriodEnum
 import ru.thetax.views.utils.externals.i18n.TranslationFunction
 import ru.thetax.views.utils.externals.i18n.useTranslation
 import ru.thetax.views.utils.formatNumber
 import web.cssom.BorderRadius
 import web.cssom.ClassName
+
+external interface SalaryProps : Props {
+    var salaryDoubleInternal: Double
+    var periodInput: PeriodEnum
+}
 
 /**
  * Detailed tax calculations
@@ -27,7 +32,7 @@ val cardWithCalculations = FC<SalaryProps> { props ->
     val tax = TaxCalculator(props.salaryDoubleInternal, true, false)
 
     div {
-        className = ClassName("col-lg-5 col-md-7 col-sm-8 col-xs-12")
+        className = ClassName("col-xl-5 col-lg-5 col-md-7 col-sm-8 col-12")
         div {
             className = ClassName("card border-top-0")
             style = jso {
@@ -36,8 +41,8 @@ val cardWithCalculations = FC<SalaryProps> { props ->
             div {
                 className = ClassName("card-header")
                 when (props.periodInput) {
-                    PeriodEnum.YEAR -> +"Расчет налога".t()
-                    PeriodEnum.MONTH -> +"Расчет налога".t()
+                    PeriodEnum.YEAR -> +"Расчет налога по среднему".t()
+                    PeriodEnum.MONTH -> +"Расчет налога по среднему".t()
                     else -> TODO("Other periods are not supported yet")
                 }
             }

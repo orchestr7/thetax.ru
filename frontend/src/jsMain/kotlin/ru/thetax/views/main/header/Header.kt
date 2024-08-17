@@ -38,7 +38,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
         div {
             className = ClassName("row justify-content-center pt-2")
             div {
-                className = ClassName("col-lg-5 col-md-7 col-sm-8 col-xs-12 px-0")
+                className = ClassName("col-xl-5 col-lg-5 col-md-7 col-sm-8 col-12 px-0")
                 div {
                     className = ClassName("row")
                     div {
@@ -74,7 +74,6 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                         width = 1.4.rem
                                     }
                                     onClick = {
-                                        console.log(platformLanguage)
                                         setSelectedLanguage(platformLanguage)
                                     }
                                 }
@@ -109,14 +108,16 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                         +"Каким будет Ваш налог с 2025го года".t()
                     }
 
-                    menu {}
-
+                    menu {
+                        this.selectedMenu = props.selectedMenu
+                        this.setSelectedMenu = props.setSelectedMenu
+                    }
                 }
 
                 div {
                     className = ClassName("row mt-3 justify-content-center")
                     div {
-                        className = ClassName("row justify-content-center mb-4")
+                        className = ClassName("row justify-content-center mb-2")
                         // ====== input salary ====
                         div {
                             className = ClassName("col-7 ps-0 pe-1")
@@ -184,7 +185,4 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
     }
 }
 
-external interface SalaryProps : Props {
-    var salaryDoubleInternal: Double
-    var periodInput: PeriodEnum
-}
+
