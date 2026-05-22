@@ -1,5 +1,7 @@
 package ru.thetax.views.main
 
+import io.github.sanyavertolet.jswrappers.i18next.TranslationFunctionWithReceiver
+import io.github.sanyavertolet.jswrappers.reacti18next.useTranslation
 import js.objects.jso
 import react.ChildrenBuilder
 import react.FC
@@ -12,8 +14,6 @@ import ru.thetax.calculator.TaxCalculator
 import ru.thetax.calculator.TaxDetail
 import ru.thetax.calculator.TaxRates
 import ru.thetax.views.utils.PeriodEnum
-import ru.thetax.views.utils.externals.i18n.TranslationFunction
-import ru.thetax.views.utils.externals.i18n.useTranslation
 import ru.thetax.views.utils.formatNumber
 import web.cssom.BorderRadius
 import web.cssom.ClassName
@@ -106,7 +106,7 @@ fun parseAndCalculateYearSalary(inputSalary: String, periodInput: PeriodEnum): D
         Double.NaN
     }
 
-fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>, t: TranslationFunction) {
+fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>, t: TranslationFunctionWithReceiver) {
     div {
         className = ClassName("row")
         div {
@@ -123,7 +123,7 @@ fun ChildrenBuilder.rowWithRates(rate: TaxRates, value: List<TaxDetail>, t: Tran
     }
 }
 
-fun ChildrenBuilder.generalRow(text: String, value: Double, t: TranslationFunction) {
+fun ChildrenBuilder.generalRow(text: String, value: Double, t: TranslationFunctionWithReceiver) {
     div {
         className = ClassName("row")
         div {

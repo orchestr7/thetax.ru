@@ -19,7 +19,7 @@ val taxCalculatorView: FC<Props> = FC {
         this.setValidInput = setValidInput
 
         this.salaryDoubleInternal = salaryDoubleInternal
-        this.setSalaryDoubleIntenal = setSalaryDoubleIntenal
+        this.setSalaryDoubleInternal = setSalaryDoubleIntenal
 
         this.setPeriodInput = setPeriodInput
         this.periodInput = periodInput
@@ -46,7 +46,7 @@ val taxCalculatorView: FC<Props> = FC {
 }
 
 external interface HeaderAndInputProps : Props {
-    var setSalaryDoubleIntenal: StateSetter<Double>
+    var setSalaryDoubleInternal: StateSetter<Double>
     var salaryDoubleInternal: Double
 
     var validInput: String

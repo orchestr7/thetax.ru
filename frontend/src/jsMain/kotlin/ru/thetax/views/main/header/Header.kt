@@ -1,5 +1,8 @@
 package ru.thetax.views.main.header
 
+import io.github.sanyavertolet.jswrappers.cookie.cookie
+import io.github.sanyavertolet.jswrappers.cookie.getLanguageCode
+import io.github.sanyavertolet.jswrappers.reacti18next.useTranslation
 import js.objects.jso
 import react.*
 import react.dom.html.ReactHTML.a
@@ -13,12 +16,9 @@ import react.dom.html.ReactHTML.select
 import ru.thetax.views.main.HeaderAndInputProps
 import ru.thetax.views.main.parseAndCalculateYearSalary
 import ru.thetax.views.utils.PeriodEnum
-import ru.thetax.views.utils.externals.cookie.cookie
-import ru.thetax.views.utils.externals.cookie.getLanguageCode
 import ru.thetax.views.utils.externals.fontawesome.*
-import ru.thetax.views.utils.externals.i18n.PlatformLanguages
-import ru.thetax.views.utils.externals.i18n.changeLanguage
-import ru.thetax.views.utils.externals.i18n.useTranslation
+import ru.thetax.views.utils.PlatformLanguages
+import ru.thetax.views.utils.changeLanguage
 import web.cssom.*
 
 /**
@@ -27,7 +27,9 @@ import web.cssom.*
 val headerAndInput = FC<HeaderAndInputProps> { props ->
     val (salaryInput, setSalaryInput) = useState("")
     val (t, i18n) = useTranslation("header")
-    val (language, setSelectedLanguage) = useState(PlatformLanguages.getByCodeOrDefault(cookie.getLanguageCode()))
+    val (language, setSelectedLanguage) = useState(
+        PlatformLanguages.getByCodeOrDefault(cookie.getLanguageCode())
+    )
     useEffect(language) { i18n.changeLanguage(language) }
 
     div {
@@ -137,7 +139,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                         val inputValue = it.target.value
                                         setSalaryInput(inputValue)
                                         val yearSalary = parseAndCalculateYearSalary(inputValue, props.periodInput)
-                                        props.setSalaryDoubleIntenal(yearSalary)
+                                        props.setSalaryDoubleInternal(yearSalary)
                                         // this "startTransition" logic prevents the following error:
                                         // A component suspended while responding to synchronous input.
                                         // This will cause the UI to be replaced with a loading indicator.
@@ -174,7 +176,7 @@ val headerAndInput = FC<HeaderAndInputProps> { props ->
                                 onChange = {
                                     val period = PeriodEnum.valueOf(it.target.value)
                                     props.setPeriodInput(period)
-                                    props.setSalaryDoubleIntenal(parseAndCalculateYearSalary(salaryInput, period))
+                                    props.setSalaryDoubleInternal(parseAndCalculateYearSalary(salaryInput, period))
                                 }
                             }
                         }

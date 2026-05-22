@@ -5,6 +5,12 @@
 package ru.thetax
 
 
+import io.github.sanyavertolet.jswrappers.i18next.backend
+import io.github.sanyavertolet.jswrappers.i18next.init
+import io.github.sanyavertolet.jswrappers.i18next.requireI18next
+import io.github.sanyavertolet.jswrappers.i18nexthttpbackend.HttpBackendConfiguration
+import io.github.sanyavertolet.jswrappers.i18nexthttpbackend.useHttpBackendPlugin
+import io.github.sanyavertolet.jswrappers.reacti18next.useReactI18next
 import js.objects.jso
 import react.*
 import react.dom.client.createRoot
@@ -17,7 +23,6 @@ import react.router.dom.RouterProvider
 import react.router.dom.createBrowserRouter
 import ru.thetax.views.components.errorBoundary
 import ru.thetax.views.main.taxCalculatorView
-import ru.thetax.views.utils.externals.i18n.initI18n
 
 
 /**
@@ -51,7 +56,21 @@ fun main() {
     kotlinext.js.require<dynamic>("bootstrap")
     /*    ReactModal.setAppElement(document.getElementById("wrapper") as HTMLElement)  // required for accessibility in react-modal */
 
-    initI18n()
+    requireI18next()
+        .useHttpBackendPlugin()
+        .useReactI18next()
+        .init {
+            loadStrategy = "languageOnly"
+            initImmediate = false
+            partialBundledLanguages = true
+            namespaces = listOf("main")
+            backend<HttpBackendConfiguration> {
+                loadPath = "/locales/{{lng}}/{{ns}}.json"
+            }
+            language = "en"
+            fallbackLanguage = "en"
+        }
+
     val mainDiv = document.getElementById("wrapper") as HTMLElement
     createRoot(mainDiv).render(App.create())
 }

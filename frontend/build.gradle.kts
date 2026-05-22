@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.js.inline.clean.removeDuplicateImports
-
 plugins {
     kotlin("multiplatform") version ("2.0.0")
 }
@@ -36,6 +34,10 @@ kotlin {
             implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom")
             implementation("org.jetbrains.kotlin-wrappers:kotlin-tanstack-react-table")
 
+            implementation("io.github.sanyavertolet.jswrappers:cookie:0.1.0")
+            implementation("io.github.sanyavertolet.jswrappers:i18next:0.1.0")
+            implementation("io.github.sanyavertolet.jswrappers:react-i18next:0.1.0")
+            implementation("io.github.sanyavertolet.jswrappers:i18next-http-backend:0.1.0")
 
             // ====== unknown technical dependencies
             compileOnly(devNpm("sass", "^1.43.0"))
